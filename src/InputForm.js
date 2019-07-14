@@ -8,12 +8,7 @@ class InputForm extends Component {
             name: 'Name',
             startTime: '00:00',
             endTime: '00:00',
-            distance: '0',
-            data: [
-                {name:"User1", startTime: "12:00", endTime: "12:30", distance: 45, mph: 90},
-                {name:"User2", startTime: "2:10", endTime: "2:30", distance: 20, mph: 60},
-                {name:"User3", startTime: "5:30", endTime: "6:30", distance: 45, mph: 45},
-            ]
+            distance: '0'
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -63,48 +58,8 @@ class InputForm extends Component {
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
-                <br />
-                <Table data={this.state.data} />
             </div>
         );
-    }
-}
-
-class Table extends Component {
-    render() {
-        return (
-            <header className="App-header">
-                Trip Log:
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Distance</th>
-                        <th>Average MPH</th>
-                    </tr>
-                    <TableRow data={this.props.data} />
-                </table>
-            </header>
-        );
-    }
-}
-
-class TableRow extends Component {
-    render() {
-        const {
-            data
-        } = this.props;
-        const row = data.map((data) =>
-            <tr>
-                <td key={data.name}>{data.name}</td>
-                <td key={data.startTime}>{data.startTime}</td>
-                <td key={data.endTime}>{data.endTime}</td>
-                <td key={data.distance}>{data.distance}</td>
-                <td key={data.mph}>{data.mph}</td>
-            </tr>
-        );
-        return (row);
     }
 }
 

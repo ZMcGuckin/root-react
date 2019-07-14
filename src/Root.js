@@ -2,23 +2,29 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './Root.css';
 import InputForm from './InputForm';
+import { FirebaseContext } from './Firebase';
+import TripTable from "./Trips";
 
 class Root extends Component {
 
-    constructor(props){
-        super(props);
-    }
-
     render() {
         return (
-            <div className="App">
-              <header className="App-header">
-                <h1>
-                  Welcome, Zach McGuckin.
-                </h1>
-                <img src={logo} className="App-logo" alt="logo"/>
-                <InputForm />
-              </header>
+            <div>
+                <FirebaseContext.Consumer>
+                    {firebase => {
+                        return(
+                            <div className="App">
+                                <header className="App-header">
+                                    <h1>
+                                        Welcome, Zach McGuckin.
+                                    </h1>
+                                    <img src={logo} className="App-logo" alt="logo"/>
+                                    <InputForm />
+                                    <TripTable />
+                                </header>
+                            </div>);
+                    }}
+                </FirebaseContext.Consumer>
             </div>
         );
     }
