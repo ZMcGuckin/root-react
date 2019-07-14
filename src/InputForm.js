@@ -6,13 +6,13 @@ class InputForm extends Component {
         super(props);
         this.state = {
             name: 'Name',
-            startTime: '12:00',
-            endTime: '12:30',
+            startTime: '00:00',
+            endTime: '00:00',
             distance: '0',
             data: [
-                {id: 1, name:"User1", distance: 5, mph: 13},
-                {id: 2, name:"User2", distance: 5, mph: 13},
-                {id: 3, name:"User3", distance: 5, mph: 13},
+                {name:"User1", startTime: "12:00", endTime: "12:30", distance: 45, mph: 90},
+                {name:"User2", startTime: "2:10", endTime: "2:30", distance: 20, mph: 60},
+                {name:"User3", startTime: "5:30", endTime: "6:30", distance: 45, mph: 45},
             ]
         };
 
@@ -35,8 +35,7 @@ class InputForm extends Component {
 
     handleSubmit(event) {
         let newData = this.state.data.slice();
-        const newId = this.state.data.length + 1;
-        newData.push({id: newId, name: this.state.name, distance: this.state.distance, mph: 13});
+        newData.push({name: this.state.name, distance: this.state.distance, mph: 13});
         this.setState({ data: newData});
         alert(this.state.name + " was submitted driving " + this.state.distance + " miles.");
         event.preventDefault();
@@ -78,8 +77,9 @@ class Table extends Component {
                 Trip Log:
                 <table>
                     <tr>
-                        <th>Id</th>
                         <th>Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
                         <th>Distance</th>
                         <th>Average MPH</th>
                     </tr>
@@ -97,8 +97,9 @@ class TableRow extends Component {
         } = this.props;
         const row = data.map((data) =>
             <tr>
-                <td key={data.id}>{data.id}</td>
                 <td key={data.name}>{data.name}</td>
+                <td key={data.startTime}>{data.startTime}</td>
+                <td key={data.endTime}>{data.endTime}</td>
                 <td key={data.distance}>{data.distance}</td>
                 <td key={data.mph}>{data.mph}</td>
             </tr>
