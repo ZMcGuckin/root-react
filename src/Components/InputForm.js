@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withFirebase } from './Firebase/context';
+import { withFirebase } from '../Firebase/context';
 
 const InputForm = () => (
     <div>
@@ -12,7 +12,7 @@ class InputFormBase extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: 'Name',
+            name: '',
             startTime: '00:00',
             endTime: '00:00',
             distance: '0'
@@ -36,15 +36,34 @@ class InputFormBase extends Component {
     }
 
     handleSubmit(event) {
-        this.props.firebase.trips().push({
-            driver: this.state.name,
-            distance: this.state.distance,
-            endTime: this.state.endTime,
-            startTime: this.state.startTime,
-            mph: 13
-        });
-        alert(this.state.name + " was submitted driving " + this.state.distance + " miles.");
+        if(this.validateParameters()) {
+            this.props.firebase.trips().push({
+                driver: this.state.name,
+                distance: this.state.distance,
+                endTime: this.state.endTime,
+                startTime: this.state.startTime
+            });
+            alert(this.state.name + " was submitted driving " + this.state.distance + " miles.");
+        }
         event.preventDefault();
+    }
+
+    validateParameters() {
+        let res = true;
+        if(this.state.name === ""){
+            res = false;
+            alert("Name can not be empty!");
+        } else if (this.state.distance === "0"){
+            res = false;
+            alert("Distance can not be 0!");
+        } else if (isNaN(this.state.distance)){
+            res = false;
+            alert("Distance must be a number!");
+        } else if (this.state.startTime === this.state.endTime){
+            res = false;
+            alert("Start time can not equal end time!");
+        }
+        return res;
     }
 
     render() {

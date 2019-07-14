@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './Root.css';
-import InputForm from './InputForm';
+import InputForm from './Components/InputForm';
 import { FirebaseContext } from './Firebase';
-import TripTable from "./Trips";
+import TripTable from "./Components/Trips";
 
 class Root extends Component {
 

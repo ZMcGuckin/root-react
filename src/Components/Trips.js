@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withFirebase } from './Firebase/context';
+import { withFirebase } from '../Firebase/context';
 
 const TripTable = () => (
     <div>
