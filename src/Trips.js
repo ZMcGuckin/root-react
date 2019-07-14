@@ -4,7 +4,6 @@ import { withFirebase } from './Firebase/context';
 const TripTable = () => (
     <div>
         <h3>Trip Table</h3>
-
         <Trips />
     </div>
 );
@@ -52,7 +51,7 @@ class TripsBase extends Component {
                 {loading && <div>Loading ...</div>}
 
                 {trips ? (
-                    <Table data={trips} />
+                    <Table trip={trips} />
                 ) : (
                     <div>There are no trips ...</div>
                 )}
@@ -67,14 +66,14 @@ class Table extends Component {
             <header className="App-header">
                 <table>
                     <tbody>
-                    <tr>
-                        <th>Name</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Distance</th>
-                        <th>Average MPH</th>
-                    </tr>
-                    <TableRow data={this.props.data} />
+                        <tr>
+                            <th>Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Distance</th>
+                            <th>Average MPH</th>
+                        </tr>
+                        <TableRow trip={this.props.trip} />
                     </tbody>
                 </table>
             </header>
@@ -85,15 +84,15 @@ class Table extends Component {
 class TableRow extends Component {
     render() {
         const {
-            data
+            trip
         } = this.props;
-        const row = data.map((data) =>
-            <tr>
-                <td key={data.driver}>{data.driver}</td>
-                <td key={data.startTime}>{data.startTime}</td>
-                <td key={data.endTime}>{data.endTime}</td>
-                <td key={data.distance}>{data.distance}</td>
-                <td key={data.mph}>{data.mph}</td>
+        const row = trip.map((trip) =>
+            <tr key = {trip.name}>
+                <td>{trip.driver}</td>
+                <td>{trip.startTime}</td>
+                <td>{trip.endTime}</td>
+                <td>{trip.distance}</td>
+                <td>{trip.mph}</td>
             </tr>
         );
         return (row);

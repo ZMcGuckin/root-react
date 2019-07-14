@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
+import { withFirebase } from './Firebase/context';
 
-class InputForm extends Component {
+const InputForm = () => (
+    <div>
+        <Form />
+    </div>
+);
+
+class InputFormBase extends Component {
 
     constructor(props) {
         super(props);
@@ -29,9 +36,13 @@ class InputForm extends Component {
     }
 
     handleSubmit(event) {
-        let newData = this.state.data.slice();
-        newData.push({name: this.state.name, distance: this.state.distance, mph: 13});
-        this.setState({ data: newData});
+        this.props.firebase.trips().push({
+            driver: this.state.name,
+            distance: this.state.distance,
+            endTime: this.state.endTime,
+            startTime: this.state.startTime,
+            mph: 13
+        });
         alert(this.state.name + " was submitted driving " + this.state.distance + " miles.");
         event.preventDefault();
     }
@@ -62,5 +73,7 @@ class InputForm extends Component {
         );
     }
 }
+
+const Form = withFirebase(InputFormBase);
 
 export default InputForm;
