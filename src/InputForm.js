@@ -13,8 +13,7 @@ class InputForm extends Component {
                 {id: 1, name:"User1", distance: 5, mph: 13},
                 {id: 2, name:"User2", distance: 5, mph: 13},
                 {id: 3, name:"User3", distance: 5, mph: 13},
-            ],
-            maxInputLength: 15
+            ]
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -22,7 +21,15 @@ class InputForm extends Component {
     }
 
     handleChange(event) {
-        const input = event.target.value.slice(0, this.state.maxInputLength);
+        //Limits the input to a certain amount of characters
+        let maxInput;
+        if(event.target.name === "name"){
+            maxInput = 15;
+        }
+        else {
+            maxInput = 5;
+        }
+        const input = event.target.value.slice(0, maxInput);
         this.setState({ [event.target.name]: input });
     }
 
@@ -41,19 +48,19 @@ class InputForm extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <label>
                         Name:
-                        <input type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+                        <input type="text" name="name" size={15} value={this.state.name} onChange={this.handleChange} />
                     </label>
                     <label>
                         Start Time:
-                        <input type="time" name="startTime" value={this.state.startTime} onChange={this.handleChange} />
+                        <input type="time" name="startTime" size={5} value={this.state.startTime} onChange={this.handleChange} />
                     </label>
                     <label>
                         End Time:
-                        <input type="time" name="endTime" value={this.state.endTime} onChange={this.handleChange} />
+                        <input type="time" name="endTime" size={5} value={this.state.endTime} onChange={this.handleChange} />
                     </label>
                     <label>
                         Distance:
-                        <input type="decimal" name="distance" value={this.state.distance} onChange={this.handleChange} />
+                        <input type="decimal" name="distance" size={5} value={this.state.distance} onChange={this.handleChange} />
                     </label>
                     <input type="submit" value="Submit" />
                 </form>
