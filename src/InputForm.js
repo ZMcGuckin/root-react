@@ -13,7 +13,8 @@ class InputForm extends Component {
                 {id: 1, name:"User1", distance: 5, mph: 13},
                 {id: 2, name:"User2", distance: 5, mph: 13},
                 {id: 3, name:"User3", distance: 5, mph: 13},
-            ]
+            ],
+            maxInputLength: 15
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -21,7 +22,8 @@ class InputForm extends Component {
     }
 
     handleChange(event) {
-        this.setState({ [event.target.name]: event.target.value });
+        const input = event.target.value.slice(0, this.state.maxInputLength);
+        this.setState({ [event.target.name]: input });
     }
 
     handleSubmit(event) {
