@@ -51,7 +51,7 @@ class TripsBase extends Component {
                 {loading && <div>Loading ...</div>}
 
                 {trips ? (
-                    <Table trip={trips} />
+                    <Table trips={trips} />
                 ) : (
                     <div>There are no trips ...</div>
                 )}
@@ -73,7 +73,7 @@ class Table extends Component {
                             <th>Distance</th>
                             <th>Average MPH</th>
                         </tr>
-                        <TableRow trip={this.props.trip} />
+                        <TableRow trip={this.props.trips} />
                     </tbody>
                 </table>
             </header>

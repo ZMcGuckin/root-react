@@ -37,13 +37,20 @@ class InputFormBase extends Component {
 
     handleSubmit(event) {
         if(this.validateParameters()) {
-            this.props.firebase.trips().push({
-                driver: this.state.name,
-                distance: this.state.distance,
-                endTime: this.state.endTime,
-                startTime: this.state.startTime
-            });
-            alert(this.state.name + " was submitted driving " + this.state.distance + " miles.");
+            const mph = this.calculateMPH();
+            if (mph > 100 || mph < 5) {
+                alert(mph + " mph is not between 5 and 100, therefore will not be stored.");
+            } else {
+                this.props.firebase.trips().push({
+                    driver: this.state.name,
+                    distance: this.state.distance,
+                    endTime: this.state.endTime,
+                    startTime: this.state.startTime,
+                    mph: mph
+                });
+                alert(this.state.name + " was submitted driving " + this.state.distance + " miles at " +
+                    "an average of " + mph + " mph.");
+            }
         }
         event.preventDefault();
     }
@@ -64,6 +71,19 @@ class InputFormBase extends Component {
             alert("Start time can not equal end time!");
         }
         return res;
+    }
+
+    calculateMPH() {
+        let startDate = new Date();
+        let timeData = this.state.startTime.match(/\d+/g).map(Number);
+        startDate.setHours(timeData[0]);
+        startDate.setMinutes(timeData[1]);
+        let endDate = new Date();
+        timeData = this.state.endTime.match(/\d+/g).map(Number);
+        endDate.setHours(timeData[0]);
+        endDate.setMinutes(timeData[1]);
+        const timeDifference = (endDate - startDate)/(60*1000);
+        return Math.round(this.state.distance/timeDifference*60);
     }
 
     render() {
