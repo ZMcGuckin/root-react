@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../Firebase/context';
 
-const TripTable = () => (
+const Trips = () => (
     <div>
-        <h3>Trip Table</h3>
-        <Trips />
+        <h3>Trip Log</h3>
+        <TripData />
     </div>
 );
 
@@ -21,14 +21,16 @@ class TripsBase extends Component {
     componentDidMount() {
         this.setState({ loading: true });
 
-        this.props.firebase.trips().on('value', snapshot => {
+        this.props.firebase.db.ref('trips').on('value', snapshot => {
+
             const tripObject = snapshot.val();
 
             if (tripObject) {
-                const tripList = Object.keys(tripObject).map(key => ({
+                let tripList = Object.keys(tripObject).map(key => ({
                     ...tripObject[key],
                     name: key,
                 }));
+                tripList.sort((a, b) => parseFloat(b.distance) - parseFloat(a.distance));
                 this.setState({
                     trips: tripList,
                     loading: false
@@ -40,8 +42,18 @@ class TripsBase extends Component {
     }
 
     componentWillUnmount() {
-        this.props.firebase.trips().off();
+        this.props.firebase.db.ref('trips').off();
     }
+
+    onTripRemove = trip => {
+        this.props.firebase.db.ref('trips').child(trip).remove()
+            .then(function() {
+                alert("Delete succeeded.")
+            })
+            .catch(function(error) {
+                alert("Delete failed: " + error.message)
+            });
+    };
 
     render() {
         const {trips, loading} = this.state;
@@ -49,18 +61,18 @@ class TripsBase extends Component {
         return (
             <div>
                 {loading && <div>Loading ...</div>}
-
                 {trips ? (
-                    <Table trips={trips} />
+                    <TripTable trips={trips} onTripRemove={this.onTripRemove}/>
                 ) : (
-                    <div>There are no trips ...</div>
+                    <div>There are no trips...</div>
                 )}
             </div>
         );
     }
 }
 
-class Table extends Component {
+class TripTable extends Component {
+
     render() {
         return (
             <header className="App-header">
@@ -73,7 +85,7 @@ class Table extends Component {
                             <th>Distance</th>
                             <th>Average MPH</th>
                         </tr>
-                        <TableRow trip={this.props.trips} />
+                        <Trip trips = {this.props.trips} onTripRemove = {this.props.onTripRemove}/>
                     </tbody>
                 </table>
             </header>
@@ -81,24 +93,29 @@ class Table extends Component {
     }
 }
 
-class TableRow extends Component {
+class Trip extends Component {
+
     render() {
-        const {
-            trip
-        } = this.props;
-        const row = trip.map((trip) =>
+        const { trips } = this.props;
+        const row = trips.map((trip) =>
             <tr key = {trip.name}>
                 <td>{trip.driver}</td>
                 <td>{trip.startTime}</td>
                 <td>{trip.endTime}</td>
                 <td>{trip.distance}</td>
                 <td>{trip.mph}</td>
+                <td className="del-cell">
+                    <input type="button"
+                           onClick={() =>  { if (window.confirm('Are you sure you wish to delete this item?'))
+                                   this.props.onTripRemove(trip.name)}}
+                           value="X" className="del-btn"/>
+                </td>
             </tr>
         );
         return (row);
     }
 }
 
-const Trips = withFirebase(TripsBase);
+const TripData = withFirebase(TripsBase);
 
-export default TripTable;
+export default Trips;

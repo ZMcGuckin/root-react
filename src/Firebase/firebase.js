@@ -16,8 +16,6 @@ class Firebase {
         app.initializeApp(config);
         this.db = app.database();
     }
-
-    trips = () => this.db.ref('trips');
 }
 
 export default Firebase;

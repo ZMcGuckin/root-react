@@ -41,7 +41,7 @@ class InputFormBase extends Component {
             if (mph > 100 || mph < 5) {
                 alert(mph + " mph is not between 5 and 100, therefore will not be stored.");
             } else {
-                this.props.firebase.trips().push({
+                this.props.firebase.db.ref('trips').push({
                     driver: this.state.name,
                     distance: this.state.distance,
                     endTime: this.state.endTime,

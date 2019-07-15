@@ -3,7 +3,8 @@ import logo from './logo.svg';
 import './Root.css';
 import InputForm from './Components/InputForm';
 import { FirebaseContext } from './Firebase';
-import TripTable from "./Components/Trips";
+import Trips from "./Components/Trips";
+import DriverTable from "./Components/Drivers";
 
 class Root extends Component {
 
@@ -20,7 +21,8 @@ class Root extends Component {
                                     </h1>
                                     <img src={logo} className="App-logo" alt="logo"/>
                                     <InputForm />
-                                    <TripTable />
+                                    <Trips />
+                                    <DriverTable />
                                 </header>
                             </div>);
                     }}
