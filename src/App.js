@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import logo from './car.png';
-import './Root.css';
+import './App.css';
 import InputForm from './Components/InputForm';
 import { FirebaseContext } from './Firebase';
 import Trips from "./Components/Trips";
@@ -8,7 +8,7 @@ import Drivers from "./Components/Drivers";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
-class Root extends Component {
+class App extends Component {
 
     render() {
         return (
@@ -49,4 +49,4 @@ class Root extends Component {
     }
 }
 
-export default Root;
+export default App;
