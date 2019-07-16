@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './car.png';
 import './Root.css';
 import InputForm from './Components/InputForm';
 import { FirebaseContext } from './Firebase';
 import Trips from "./Components/Trips";
-import DriverTable from "./Components/Drivers";
+import Drivers from "./Components/Drivers";
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
 
 class Root extends Component {
 
@@ -17,13 +19,28 @@ class Root extends Component {
                             <div className="App">
                                 <header className="App-header">
                                     <h1>
-                                        Welcome, Zach McGuckin.
+                                        React Trip Logger
                                     </h1>
                                     <img src={logo} className="App-logo" alt="logo"/>
                                     <InputForm />
-                                    <Trips />
-                                    <DriverTable />
                                 </header>
+                                <CarouselProvider
+                                    className = "App-slider"
+                                    naturalSlideWidth={50}
+                                    naturalSlideHeight={100}
+                                    totalSlides={2}
+                                >
+                                    <ButtonBack>Trips</ButtonBack>
+                                    <ButtonNext>Drivers</ButtonNext>
+                                    <Slider>
+                                        <Slide index={0}>
+                                            <Trips />
+                                        </Slide>
+                                        <Slide index={1}>
+                                            <Drivers />
+                                        </Slide>
+                                    </Slider>
+                                </CarouselProvider>
                             </div>);
                     }}
                 </FirebaseContext.Consumer>
