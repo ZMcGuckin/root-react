@@ -21,24 +21,46 @@ class DriverBase extends Component {
     componentDidMount() {
         this.setState({ loading: true });
 
-        this.props.firebase.db.ref('trips').on('value', snapshot => {
+        this.props.firebase.db.ref('drivers').on('value', snapshot => {
 
-            const tripObject = snapshot.val();
+            const driverObject = snapshot.val();
 
-            if (tripObject) {
-                let tripList = Object.keys(tripObject).map(key => ({
-                    ...tripObject[key],
+            if (driverObject) {
+                let driverList = Object.keys(driverObject).map(key => ({
+                    ...driverObject[key],
                     name: key,
                 }));
-                tripList.sort((a, b) => parseFloat(b.distance) - parseFloat(a.distance));
+                driverList = this.reformatDriverList(driverList);
+                driverList.sort((a, b) => parseFloat(b.distance) - parseFloat(a.distance));
                 this.setState({
-                    drivers: tripList,
+                    drivers: driverList,
                     loading: false
                 });
             } else {
                 this.setState({ drivers: null, loading: false });
             }
         });
+    }
+
+    reformatDriverList(driverList) {
+        let truncatedDriverList = [];
+        driverList.forEach(function(driver){
+            let driverData = {
+                name: driver.name,
+                distance: 0,
+                duration: 0,
+                mph: 0,
+                trips: driver.trips
+            };
+            for(let trip in driver.trips){
+                for(let data in driver.trips[trip]){
+                    driverData[data] = (driverData[data]+driver.trips[trip][data]);
+                }
+            }
+            driverData['mph'] = Math.round(driverData['distance']/driverData['duration']*60);
+            truncatedDriverList.push(driverData);
+        });
+        return truncatedDriverList;
     }
 
     componentWillUnmount() {
@@ -87,7 +109,7 @@ class Driver extends Component {
         const { drivers } = this.props;
         const row = drivers.map((driver) =>
             <tr key = {driver.name}>
-                <td>{driver.driver}</td>
+                <td>{driver.name}</td>
                 <td>{driver.distance}</td>
                 <td>{driver.mph}</td>
             </tr>

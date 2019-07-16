@@ -46,9 +46,15 @@ class TripsBase extends Component {
     }
 
     onTripRemove = trip => {
-        this.props.firebase.db.ref('trips').child(trip).remove()
+        //remove the trip item
+        const db = this.props.firebase.db;
+        db.ref('trips').child(trip.name).remove()
             .then(function() {
-                alert("Delete succeeded.")
+                //remove the trip from the driver
+                db.ref('drivers/'+trip.driver+'/trips').child(trip.name).remove()
+                    .then(function(){
+                        alert("Delete succeeded.")
+                    });
             })
             .catch(function(error) {
                 alert("Delete failed: " + error.message)
@@ -107,7 +113,7 @@ class Trip extends Component {
                 <td className="del-cell">
                     <input type="button"
                            onClick={() =>  { if (window.confirm('Are you sure you wish to delete this item?'))
-                                   this.props.onTripRemove(trip.name)}}
+                                   this.props.onTripRemove(trip)}}
                            value="X" className="del-btn"/>
                 </td>
             </tr>

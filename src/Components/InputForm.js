@@ -37,19 +37,30 @@ class InputFormBase extends Component {
 
     handleSubmit(event) {
         if(this.validateParameters()) {
-            const mph = this.calculateMPH();
-            if (mph > 100 || mph < 5) {
-                alert(mph + " mph is not between 5 and 100, therefore will not be stored.");
+            //verify speed is within limits and save to db
+            const tripStats = this.calculateTripStats();
+            if (tripStats.mph > 100 || tripStats.mph < 5) {
+                alert(tripStats.mph + " mph is not between 5 and 100, therefore will not be stored.");
             } else {
-                this.props.firebase.db.ref('trips').push({
+                const db = this.props.firebase.db;
+                //save to trips table
+                db.ref('trips').push({
                     driver: this.state.name,
-                    distance: this.state.distance,
+                    distance: parseInt(this.state.distance),
                     endTime: this.state.endTime,
                     startTime: this.state.startTime,
-                    mph: mph
+                    mph: tripStats.mph
+                }).then((snap) => {
+                    const tripKey = snap.key;
+                    //save to driver table
+                    db.ref('drivers/'+this.state.name+'/trips/'+tripKey).set({
+                        distance: parseInt(this.state.distance),
+                        duration: tripStats.duration
+                    }).then( () => {
+                        alert(this.state.name + " was submitted driving " + this.state.distance + " miles at " +
+                            "an average of " + tripStats.mph + " mph.");
+                    });
                 });
-                alert(this.state.name + " was submitted driving " + this.state.distance + " miles at " +
-                    "an average of " + mph + " mph.");
             }
         }
         event.preventDefault();
@@ -73,7 +84,7 @@ class InputFormBase extends Component {
         return res;
     }
 
-    calculateMPH() {
+    calculateTripStats() {
         let startDate = new Date();
         let timeData = this.state.startTime.match(/\d+/g).map(Number);
         startDate.setHours(timeData[0]);
@@ -83,7 +94,10 @@ class InputFormBase extends Component {
         endDate.setHours(timeData[0]);
         endDate.setMinutes(timeData[1]);
         const timeDifference = (endDate - startDate)/(60*1000);
-        return Math.round(this.state.distance/timeDifference*60);
+        return {
+            mph: Math.round(this.state.distance/timeDifference*60),
+            duration: timeDifference
+        };
     }
 
     render() {
