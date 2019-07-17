@@ -5,6 +5,7 @@ import InputForm from './Components/InputForm';
 import { FirebaseContext } from './Firebase';
 import Trips from "./Components/Trips";
 import Drivers from "./Components/Drivers";
+import FileUpload from "./Components/FileUpload";
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -22,7 +23,10 @@ class App extends Component {
                                         React Trip Logger
                                     </h1>
                                     <img src={logo} className="App-logo" alt="logo"/>
+                                    <FileUpload />
+                                    <br />
                                     <InputForm />
+                                    <br />
                                 </header>
                                 <CarouselProvider
                                     className = "App-slider"
